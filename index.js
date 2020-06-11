@@ -33,6 +33,37 @@ const BlogView = Backbone.View.extend({
   initialize: function() {
     this.template = _.template($('.blogs-list-template').html());
   },
+  events: {
+    'click .edit-blog': 'edit',
+    'click .update-blog': 'update',
+    'click .cancel-blog': 'cancel',
+    'click .delete-blog': 'delete',
+  },
+  edit: function() {
+    $('.edit-blog').hide();
+    $('.delete-blog').hide();
+    this.$('.update-blog').show();
+    this.$('.cancel-blog').show();
+
+    const author = this.$('.author').html();
+    const title = this.$('.title').html();
+    const url = this.$('.url').html();
+
+    this.$('.author').html('<input type="text" class="author-update" value="' + author + '">');
+    this.$('.title').html('<input type="text" class="title-update" value="' + title + '">');
+    this.$('.url').html('<input type="text" class="url-update" value="' + url + '">');
+  },
+  update: function() {
+    this.model.set('author', $('.author-update').val());
+    this.model.set('title', $('.title-update').val());
+    this.model.set('url', $('.url-update').val());
+  },
+  cancel: function() {
+    blogsView.render();
+  },
+  delete: function() {
+    this.model.destroy();
+  },
   render: function() {
     this.$el.html(this.template(this.model.toJSON()));
     return this;
@@ -44,6 +75,12 @@ const BlogsView = Backbone.View.extend({
   el: $('.blogs-list'),
   initialize: function() {
     this.model.on('add', this.render, this);
+    this.model.on('change', function() {
+      setTimeout(() => {
+        this.render();
+      });
+    }, this);
+    this.model.on('remove', this.render, this);
   },
   render: function() {
     const self = this;
