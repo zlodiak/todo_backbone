@@ -6,32 +6,32 @@ const Blog = Backbone.Model.extend({
 	}
 });
 
-const blog1 = new Blog({
-    author: 'qqqq', 
-    title: 'www',
-    url: 'eeeeee'
-});
+// const blog1 = new Blog({
+//     author: 'qqqq', 
+//     title: 'www',
+//     url: 'eeeeee'
+// });
 
-const blog2 = new Blog({
-    author: 'aaaa', 
-    title: 'ssss',
-    url: 'dd'
-});
+// const blog2 = new Blog({
+//     author: 'aaaa', 
+//     title: 'ssss',
+//     url: 'dd'
+// });
 
-console.log(blog1, blog1.toJSON())
+// console.log(blog1, blog1.toJSON())
 
 const Blogs = Backbone.Collection.extend({});
 
-const blogs = new Blogs([blog1, blog2]);
+const blogs = new Blogs();
 
-console.log(blogs, blogs.toJSON(), blogs.toArray())
+// console.log(blogs, blogs.toJSON(), blogs.toArray())
 
 
 const BlogView = Backbone.View.extend({
   model: new Blog(),
   tagName: 'tr',
   initialize: function() {
-    this.template = _.template($('.blogs-list-template').html())
+    this.template = _.template($('.blogs-list-template').html());
   },
   render: function() {
     this.$el.html(this.template(this.model.toJSON()));
@@ -55,7 +55,7 @@ const BlogsView = Backbone.View.extend({
   }
 });
 
-const blogsView = new BlogView();
+const blogsView = new BlogsView();
 
 
 $(document).ready(function() {
@@ -65,7 +65,9 @@ $(document).ready(function() {
       title: $('.title-input').val(),
       url: $('.url-input').val()
     });
-    console.log(blog)
+    $('.author-input').val('');
+    $('.title-input').val('');
+    $('.url-input').val('');
     blogs.add(blog);
   })
 })
